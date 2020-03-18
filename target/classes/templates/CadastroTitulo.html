@@ -14,35 +14,46 @@
   		</a>
 	</nav>
 	
-	<form class="form-horizontal" method="POST" action="/titulos">
+	<form class="form-horizontal" method="POST" action="/titulos" th:object="${titulo}">
 		<div class="alert alert-success mt-3 ml-4 mr-4" th:if="${!#strings.isEmpty(mensagem)}">
 			<button type="button" class="close" data-dismiss="alert"></button>
 			<span th:text="${mensagem}">Título salvo com sucesso!</span>
 		</div>
 		
+		<div class="alert alert-danger mt-3 ml-4 mr-4" th:if="${#fields.hasAnyErrors()}">
+			<div th:each="detailedErrors : ${#fields.detailedErrors()}">
+				<span th:text="${detailedErrors.message}"></span>
+			</div>
+		</div>
+		
 		<div class="card mt-4 ml-4 mr-4">
-			<h5 class="card-header" style="padding-top: 20px;">Novo Título
+			<h5 class="card-header" style="padding-top: 12px; padding-bottom: 5px;">Novo Título
 				<a class="btn btn-link float-right align-baseline" href="/titulos/">Voltar para pesquisa</a>
 			</h5>
+			
 		  	<div class="card-body">
-				<div class="form-group">
+		  		<div class="form-group">
+		  			<input type="hidden" th:field="*{codigo}"
+		  		</div>
+		  	
+				<div class="form-group" th:classappend="${#fields.hasErrors('descricao')}">
 					<label for="descricao" class="col-sm-2 control-label">Descrição</label>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="descricao" name="descricao"/>
+						<input type="text" class="form-control" id="descricao" th:field="*{descricao}"/>
 					</div>
 				</div>
 				
-				<div class="form-group">
+				<div class="form-group" th:classappend="${#fields.hasErrors('dataVencimento')}">
 					<label for="dataVencimento" class="col-sm-2 control-label">Data de Vencimento</label>
 					<div class="col-sm-2">
-						<input type="text" class="form-control" id="dataVencimento" name="dataVencimento"/>
+						<input type="text" class="form-control" id="dataVencimento" th:field="*{dataVencimento}"/>
 					</div>
 				</div>
 				
-				<div class="form-group">
+				<div class="form-group" th:classappend="${#fields.hasErrors('valor')}">
 					<label for="valor" class="col-sm-2 control-label">Valor</label>
 					<div class="col-sm-2">
-						<input type="text" class="form-control" id="valor" name="valor"/>
+						<input type="text" class="form-control" id="valor" th:field="*{valor}"/>
 					</div>
 				</div>
 				
