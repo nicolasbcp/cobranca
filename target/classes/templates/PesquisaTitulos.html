@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8"/>
+	<title>Pesquisar Títulos</title>
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+</head>
+
+<body>
+	<nav class="navbar navbar-light bg-dark">
+  		<a class="navbar-brand" href="#">
+    		<img src="/images/StarterBranca.png" class="ml-3 mb-2" width="90" height="18" alt="">
+  		</a>
+	</nav>
+	
+	<div class="card mt-4 ml-4 mr-4">
+		<h5 class="card-header" style="padding-top: 12px; padding-bottom: 5px;">Pesquisa de Títulos
+			<a class="btn btn-link float-right align-baseline" href="/titulos/novo">Novo Título</a>
+		</h5>
+		
+		<div class="card-body">
+			<table class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th class="text-center col-md-1">#</th>
+						<th>Descrição</th>
+						<th class="text-center col-md-2">Data de Vencimento</th>
+						<th class="text-center col-md-2">Valor</th>
+						<th class="text-center col-md-2">Status</th>
+						<th class="col-md-2"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="titulo : ${titulos}">
+						<td class="text-center" th:text="${titulo.codigo}"></td>
+						<td th:text="${titulo.descricao}"></td>
+						<td class="text-center" th:text="${{titulo.dataVencimento}}"></td>
+						<td class="text-center" th:text="|R$ ${{titulo.valor}}|"></td>
+						<td class="text-center" th:attr="data-role=${titulo.codigo}">
+							<span class="badge" th:text="${titulo.status.descricao}"
+								th:classappend="${titulo.pendente ? 'badge-pill badge-danger' : 'badge-pill badge-success'}">Success</span>
+						</td>
+						<td class="text-center">
+							<a class="btn btn-link btn-xs" th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}">
+								<i class="fas fa-pencil-alt" style="color: black;"></i>
+							</a>
+							<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusao"
+									th:attr="data-codigo=${titulo.codigo}, data-descricao=${titulo.descricao}">
+								<i class="fas fa-trash-alt"></i>
+							</a>
+							<a class="btn btn-link btn-xs js-atualizar-status" th:if="${titulo.pendente}"
+									th:attr="data-codigo=${titulo.codigo}"
+									th:href="@{/titulos/{codigo}/receber(codigo=${titulo.codigo})}">
+								<i class="fas fa-check" style="color: black;"></i>
+							</a>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="6" th:if="${#lists.isEmpty(titulos)}">Nenhum título foi encontrado</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="modal fade" id="confirmacaoExclusao" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  			<div class="modal-dialog modal-dialog-centered" role="document">
+  				<form action="/titulos" method="POST">
+  					<input type="hidden" name="_method" value="DELETE"/>
+  					
+   					<div class="modal-content">
+      					<div class="modal-header" style="width: 600px;">
+        					<h5 class="modal-title" id="exampleModalLongTitle">Você tem certeza?</h5>
+        					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          						<span aria-hidden="true">&times;</span>
+        					</button>
+      					</div>
+      					<div class="modal-body">
+        					<span>Tem certeza que deseja apagar o título?</span>
+      					</div>
+      					<div class="modal-footer">
+       		 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        					<button type="submit" class="btn btn-primary">Excluir</button>
+      					</div>
+    				</div>
+    			</form>
+  			</div>
+		</div>
+	</div>
+	
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<script src="/js/cobranca.js"></script>
+</body>
+
+</html>
