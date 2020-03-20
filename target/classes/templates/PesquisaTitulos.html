@@ -10,7 +10,7 @@
 
 <body>
 	<nav class="navbar navbar-light bg-dark">
-  		<a class="navbar-brand" href="#">
+  		<a class="navbar-brand" href="http://localhost:8080/titulos">
     		<img src="/images/StarterBranca.png" class="ml-3 mb-2" width="90" height="18" alt="">
   		</a>
 	</nav>
@@ -21,6 +21,21 @@
 		</h5>
 		
 		<div class="card-body">
+			<form method="GET" class="form-horizontal">
+				<div class="form-group">
+					<div class="col-sm-4">
+						<div class="input-group">
+							<input class="form-control" placeholder="Pesquise seu título" autofocus="autofocus" name="busca"></input> 
+							<span class="input-group-btn">
+								<button class="btn btn-default">
+									<i class="fas fa-search"></i>
+								</button>
+							</span>
+						</div>
+					</div>
+				</div>
+			</form>
+		
 			<table class="table table-bordered table-striped">
 				<thead>
 					<tr>
@@ -36,7 +51,7 @@
 					<tr th:each="titulo : ${titulos}">
 						<td class="text-center" th:text="${titulo.codigo}"></td>
 						<td th:text="${titulo.descricao}"></td>
-						<td class="text-center" th:text="${{titulo.dataVencimento}}"></td>
+						<td class="text-center" th:text="${#dates.format(titulo.dataVencimento, 'dd/MM/yyyy')}"></td>
 						<td class="text-center" th:text="|R$ ${{titulo.valor}}|"></td>
 						<td class="text-center" th:attr="data-role=${titulo.codigo}">
 							<span class="badge" th:text="${titulo.status.descricao}"
@@ -46,14 +61,8 @@
 							<a class="btn btn-link btn-xs" th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}">
 								<i class="fas fa-pencil-alt" style="color: black;"></i>
 							</a>
-							<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusao"
-									th:attr="data-codigo=${titulo.codigo}, data-descricao=${titulo.descricao}">
-								<i class="fas fa-trash-alt"></i>
-							</a>
-							<a class="btn btn-link btn-xs js-atualizar-status" th:if="${titulo.pendente}"
-									th:attr="data-codigo=${titulo.codigo}"
-									th:href="@{/titulos/{codigo}/receber(codigo=${titulo.codigo})}">
-								<i class="fas fa-check" style="color: black;"></i>
+							<a class="btn btn-link btn-xs" th:href="@{/titulos/excluir/{codigo}(codigo=${titulo.codigo})}"> 							
+								<i class="fas fa-trash-alt" style="color: black;"></i>
 							</a>
 						</td>
 					</tr>

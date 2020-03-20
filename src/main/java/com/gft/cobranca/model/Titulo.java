@@ -32,7 +32,7 @@ public class Titulo {
 	private String descricao;
 	
 	@NotNull(message="Data de vencimento é obrigatória")
-	@DateTimeFormat(pattern="dd/MM/yyyy")
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@Temporal(TemporalType.DATE)
 	private Date dataVencimento;
 	
